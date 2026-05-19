@@ -1,0 +1,35 @@
+СТРУКТУРА ПРОЕКТА
+
+cmd/cli/main.go - запуск для консольной версии
+Вывести текст истории
+Предлагается 
+
+cmd/web/main.go - запуск для веб версии
+
+
+cyoa/ - пакет с логикой (структуры, чтение json, переходы по частям истории)
+
+type Story map[string]Chapter
+
+struct Chapter {
+    Title   string
+    Paragraphs []string
+    Options []Options
+}
+
+struct Options {
+    Text string
+    arc  string
+}
+
+func GetChapter(s Story, storyName string) {
+    //вернуть s[storyName]
+}
+
+func LoadStory() Story {
+    //Создать Story
+    //Декодировать json в Story
+    //Вернуть Story
+}
+
+

@@ -1,0 +1,31 @@
+{{ define "story" }}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .Title }}</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .paragraph { margin-bottom: 15px; }
+        .options { margin-top: 30px; border-top: 1px solid #ccc; padding-top: 20px; }
+        .option { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>{{ .Title }}</h1>
+
+    {{ range .Paragraphs }}
+        <div class="paragraph">{{ . }}</div>
+    {{ end }}
+    
+    <div class="options">
+        <h3>Что ты выберешь?</h3>
+        {{ range .Options }}
+            <div class="option">
+                <a href="/api/v1/cyoa/{{ .Arc }}">{{ .Text }}</a>
+            </div>
+        {{ end }}
+    </div>
+</body>
+</html>
+{{ end }}
