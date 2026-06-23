@@ -1,6 +1,7 @@
 package web
 
 import (
+	"bytes"
 	"html/template"
 	"log/slog"
 	"net/http"
@@ -27,39 +28,39 @@ func (h *WebHandler) GetChapter(w http.ResponseWriter, r *http.Request) {
 	}
 
 	chapter, ok := cyoa.GetChapter(h.story, chapterParam)
-	if !ok {
-		h.logger.Warn("Chapter not found", "param", chapterParam)
 
-		w.WriteHeader(http.StatusNotFound)
-		errorChapter := cyoa.Chapter{
-			Title: "Такая история нам незнакома...",
+	status := http.StatusOK
+	tmplName := "story"
+
+	switch {
+	case !ok:
+		h.logger.Warn("Chapter not found", "param", chapterParam)
+		status = http.StatusNotFound
+		chapter = cyoa.Chapter{
+			Title: "A tale such as this remains untold......",
 			Paragraphs: []string{
-				"Вы забрели в темный угол библиотеки, где книги еще не написаны.",
-				"Возможно, стоит вернуться в начало?",
+				"You have wandered into a dark corner of the library, where books have not yet been written.",
+				"Perhaps it's time to return to the beginning?",
 			},
 			Options: []cyoa.Options{
-				{Text: "Вернуться в начало", Arc: "intro"},
+				{Text: "Return to the beginning", Arc: "intro"},
 			},
 		}
-		if err := h.tmp.ExecuteTemplate(w, "story", errorChapter); err != nil {
-			h.logger.Error("Failed to execute error template", "err", err)
-			http.Error(w, "Internal Server Error", 500)
-		}
+	case len(chapter.Options) == 0:
+		tmplName = "the end"
+	}
+
+	// Render into a buffer first: if the template fails we can still send a
+	// clean 500 instead of a partial body under an already-committed status.
+	var buf bytes.Buffer
+	if err := h.tmp.ExecuteTemplate(&buf, tmplName, chapter); err != nil {
+		h.logger.Error("Failed to execute template", "template", tmplName, "err", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-
-	if len(chapter.Options) == 0 {
-		if err := h.tmp.ExecuteTemplate(w, "the end", chapter); err != nil {
-			h.logger.Error("Failed to execute 'the end' template", "err", err)
-			http.Error(w, "Internal Server Error", 500)
-		}
-		return
-	}
-
-	if err := h.tmp.ExecuteTemplate(w, "story", chapter); err != nil {
-		h.logger.Error("Failed to execute story template", "err", err)
-		http.Error(w, "Internal Server Error", 500)
+	w.WriteHeader(status)
+	if _, err := buf.WriteTo(w); err != nil {
+		h.logger.Error("Failed to write response", "err", err)
 	}
 }

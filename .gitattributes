@@ -1,0 +1,12 @@
+# Normalize line endings to LF in the repository.
+* text=auto eol=lf
+
+# Go and other text sources are always LF so gofmt/CI stay consistent
+# regardless of each contributor's core.autocrlf setting.
+*.go    text eol=lf
+*.json  text eol=lf
+*.html  text eol=lf
+*.md    text eol=lf
+*.yml   text eol=lf
+*.mod   text eol=lf
+*.sum   text eol=lf

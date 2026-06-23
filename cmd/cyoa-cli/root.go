@@ -21,19 +21,19 @@ var rootCmd = &cobra.Command{
 	Short: "",
 	Long:  ``,
 
-	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		filepath, _ := cmd.Flags().GetString("p")
-		if strings.TrimSpace(filepath) == "" {
-			fmt.Printf("filepath is %s\n", filepath)
-			return
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		path, _ := cmd.Flags().GetString("path")
+		if strings.TrimSpace(path) == "" {
+			return fmt.Errorf("path to the story file must not be empty")
 		}
 
 		Logger = slog.Default()
-		s, err := cyoa.LoadStory(filepath, Logger)
+		s, err := cyoa.LoadStory(path)
 		if err != nil {
-			return
+			return fmt.Errorf("loading story: %w", err)
 		}
 		Story = s
+		return nil
 	},
 }
 
@@ -45,6 +45,5 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	rootCmd.PersistentFlags().String("p", "C:\\Users\\User\\OneDrive\\Рабочий стол\\goProjects\\cyoa\\gopher.json", "Path to the file")
+	rootCmd.PersistentFlags().StringP("path", "p", "gopher.json", "Path to the story file")
 }

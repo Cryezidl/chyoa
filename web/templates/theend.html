@@ -1,13 +1,13 @@
 {{ define "the end" }}
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ .Title }}</title>
     <style>
         :root {
-            --bg-color: #1a1b26; /* Темный фон в стиле твоего редактора кода */
+            --bg-color: #1a1b26;
             --text-color: #a9b1d6;
             --accent-color: #7aa2f7;
             --title-color: #f7768e;
@@ -21,7 +21,7 @@
             padding: 40px 20px;
             background-color: var(--bg-color);
             color: var(--text-color);
-            text-align: center; /* Центрируем всё для финала */
+            text-align: center; 
         }
 
         h1 { 
@@ -82,9 +82,9 @@
         {{ end }}
     </div>
     
-    <div class="end-message">Спасибо за пройденное путешествие!</div>
+    <div class="end-message">Thank you for journey we shared!</div>
     
-    <a href="/api/v1/cyoa/intro" class="restart-btn">ИГРАТЬ СНОВА</a>
+    <a href="/api/v1/cyoa/intro" class="restart-btn">PLAY AGAIN</a>
 </body>
 </html>
 {{ end }}

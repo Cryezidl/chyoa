@@ -2,7 +2,6 @@ package cyoa
 
 import (
 	"encoding/json"
-	"log/slog"
 	"os"
 )
 
@@ -19,22 +18,22 @@ type Options struct {
 
 type Story map[string]Chapter
 
-func LoadStory(fileName string, logger *slog.Logger) (Story, error) {
-	//Открыть файл
+func LoadStory(fileName string) (Story, error) {
+	//open file
 	file, err := os.Open(fileName)
 	if err != nil {
 
 		return nil, err
 	}
 	defer file.Close()
-	//Создать Story
+	//create Story
 	var s Story
-	//Декодировать json в Story
+	//decode json into Story
 	if err := json.NewDecoder(file).Decode(&s); err != nil {
 
 		return nil, err
 	}
-	//Вернуть Story
+	//return Story
 	return s, nil
 }
 

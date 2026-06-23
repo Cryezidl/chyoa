@@ -9,12 +9,13 @@ import (
 
 var playCmd = &cobra.Command{
 	Use:   "play",
-	Short: "Запустить игру в терминале",
-	Run: func(cmd *cobra.Command, args []string) {
+	Short: "Start game in CLI",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		if Story == nil {
+			return fmt.Errorf("no story loaded: check the --path flag")
+		}
 		startingArc, _ := cmd.Flags().GetString("sa")
-		fmt.Printf("[play.go] starting arc %s", startingArc)
-
-		cli.StartGame(Story, startingArc, Logger)
+		return cli.StartGame(Story, startingArc, Logger)
 	},
 }
 

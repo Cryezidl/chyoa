@@ -18,7 +18,7 @@ func main() {
 	flag.Parse()
 
 	logger := slog.Default()
-	story, err := cyoa.LoadStory(*filepath, logger)
+	story, err := cyoa.LoadStory(*filepath)
 	if err != nil {
 		logger.Error("Couldn't load story file", "Error", err)
 		os.Exit(1)
