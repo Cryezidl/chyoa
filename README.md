@@ -16,6 +16,20 @@ two different ways:
 - Web player exposing a simple REST-ish route (`/api/v1/cyoa/{chapter}`)
 - Clean separation between the story engine (`cyoa`), delivery (`cli`, `web`) and entry points (`cmd`)
 
+## Screenshots
+
+### Terminal (CLI)
+
+| Intro chapter | A later chapter |
+| --- | --- |
+| ![CLI intro chapter](docs/screenshots/cli-intro.png) | ![CLI later chapter](docs/screenshots/cli-chapter.png) |
+
+### Web
+
+| Story page | The End page |
+| --- | --- |
+| ![Web story page](docs/screenshots/web-intro.png) | ![Web "The End" page](docs/screenshots/web-the-end.png) |
+
 ## Project structure
 
 ```
